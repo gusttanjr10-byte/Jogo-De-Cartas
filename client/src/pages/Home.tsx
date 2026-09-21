@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type Step = "landing" | "quiz" | "analysis" | "cards" | "result" | "vsl";
 type Question = { title: string; intro?: string; options: string[] };
@@ -79,17 +79,7 @@ function Shell({ children, progress = 0 }: { children: React.ReactNode; progress
 
 function Vsl() {
   const [started, setStarted] = useState(false);
-  useEffect(() => {
-    const host = document.getElementById("vid_6a42c048641d860e23c55335");
-    if (!host || host.dataset.loaded) return;
-    host.dataset.loaded = "true";
-    const script = document.createElement("script");
-    script.src = "https://scripts.converteai.net/37209f46-f3bf-4549-a72e-f25bf0388e60/players/6a42c048641d860e23c55335/v4/player.js";
-    script.async = true;
-    host.appendChild(script);
-    return () => script.remove();
-  }, []);
-  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""}`}><div id="vid_6a42c048641d860e23c55335" className="converte-player" /><img src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><button type="button" className="sound-overlay" onClick={() => setStarted(true)}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div></div></Shell>;
+  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""}`}><img src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><div className="vsl-play-state">{started ? "Sua revelação está pronta para ouvir" : ""}</div><button type="button" className="sound-overlay" onClick={() => setStarted(true)}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div></div></Shell>;
 }
 
 function Cards({ onDone }: { onDone: () => void }) {
