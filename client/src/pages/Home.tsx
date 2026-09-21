@@ -1,25 +1,50 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import { useState } from "react";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  const [opened, setOpened] = useState(false);
+
+  function handleCta() {
+    setOpened(true);
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
+    <main className="ritual-page">
+      <div className="ritual-halo" aria-hidden="true" />
+      <section className="ritual-content" aria-labelledby="page-title">
+        <img
+          className="ritual-mark"
+          src="/manus-storage/consulta-gratuita_9549de9b.webp"
+          alt="Consulta gratuita"
+        />
+
+        <h1 id="page-title">
+          Descubra Gratuitamente o Que as Cartas
+          <br />
+          Vão Revelar Sobre Sua Vida!
+        </h1>
+
+        <p>
+          As cartas do baralho dourado sagrado podem revelar o
+          <br className="desktop-break" /> caminho exato para <strong>remover os bloqueios em sua vida.</strong>
+        </p>
+
+        <div className="ritual-spacer" aria-hidden="true" />
+
+        <div className={`reveal ${opened ? "reveal-visible" : ""}`}>
+          <img
+            src="/manus-storage/consultora_215990ec.webp"
+            alt="Consultora de tarô pronta para sua leitura"
+          />
+          <span>Seu caminho começa com uma pergunta.</span>
+        </div>
+      </section>
+
+      <div className="ritual-footer">
+        <button type="button" onClick={handleCta} className="ritual-cta">
+          CLIQUE AQUI E FAÇA SUA LEITURA GRATUITA!
+        </button>
+      </div>
+    </main>
   );
 }
+
