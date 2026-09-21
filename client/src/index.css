@@ -9,22 +9,26 @@ body { min-width: 320px; overflow-x: hidden; }
 button { font: inherit; cursor: pointer; }
 .ritual-page { min-height: 100vh; background: linear-gradient(180deg,#5128c3 0%,#5128c3 84%,#4222a2 88%,#09071f 96%,#050617 100%); color: #fff; }
 .ritual-halo { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 30%,rgba(137,95,239,.18),transparent 48%), linear-gradient(180deg,transparent 75%,rgba(0,0,0,.44)); }
+.ritual-sparkles { position:fixed; inset:0; pointer-events:none; opacity:.45; background-image:radial-gradient(circle,#f0d080 0 1px,transparent 1.5px),radial-gradient(circle,#fff3b0 0 1px,transparent 1.5px); background-position:10% 20%,80% 65%; background-size:170px 210px,230px 260px; animation: sparkleDrift 8s ease-in-out infinite alternate; }
 .funnel-shell { position: relative; z-index: 1; width: min(100% - 32px, 625px); min-height: 100vh; margin: auto; padding: 24px 0 110px; text-align: center; }
+.ritual-entrance { animation: pageEnter .42s cubic-bezier(.23,1,.32,1) both; }
 .logo { display:block; width:74px; height:74px; object-fit:contain; margin:0 auto 16px; filter: drop-shadow(0 8px 10px rgba(20,4,60,.3)); }
 .progress { width: min(100%, 357px); height: 10px; margin: 0 auto 54px; border-radius: 999px; background:#080812; box-shadow: inset 0 1px 2px rgba(0,0,0,.55); overflow:hidden; }
-.progress span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#c9a84c,#efd37b); transition:width .45s ease; }
+.progress span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#c9a84c,#efd37b); transition:width .45s ease; animation: progressGlow 1.8s ease-in-out infinite; }
 h1,h2,h3,p { margin:0; }
 h1 { max-width:370px; margin: 0 auto 12px; font-size:17px; line-height:1.32; font-weight:800; text-decoration:underline; text-underline-offset:3px; }
 .landing p { max-width:350px; margin:0 auto; font-size:13px; line-height:1.48; }
 .consultora-landing { display:block; width:min(100%,300px); aspect-ratio:1; object-fit:cover; margin:22px auto 0; border-radius:6px; box-shadow:0 8px 20px rgba(0,0,0,.28); }
 .landing .gold-button { margin-top:24px; }
-.gold-button { min-height:54px; width:min(100%,360px); padding:0 18px; border:0; border-bottom:5px solid #f5edd8; border-radius:7px; color:white; background:linear-gradient(#d6b229,#a77900); box-shadow:0 10px 24px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.3); font-size:12px; font-weight:800; transition:transform .16s ease,filter .16s ease; }
+.gold-button { position:relative; overflow:hidden; min-height:54px; width:min(100%,360px); padding:0 18px; border:0; border-bottom:5px solid #f5edd8; border-radius:7px; color:white; background:linear-gradient(#d6b229,#a77900); box-shadow:0 10px 24px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.3); font-size:12px; font-weight:800; transition:transform .16s ease,filter .16s ease; }
+.gold-button::after { content:""; position:absolute; top:-60%; left:-40%; width:24%; height:220%; background:rgba(255,255,255,.35); transform:rotate(24deg); animation: buttonShine 3.6s ease-in-out infinite; }
 .gold-button:hover { filter:brightness(1.08); transform:translateY(-2px); }
 .gold-button:active { transform:scale(.97); }
 .quiz h2 { max-width:400px; margin:0 auto 12px; font-size:17px; line-height:1.35; font-weight:800; }
 .quiz .intro { max-width:370px; margin:0 auto 30px; white-space:pre-line; font-size:13px; line-height:1.45; }
 .options { display:grid; gap:8px; margin-top:30px; }
-.options button { min-height:57px; padding:10px 22px; border:2px solid #e3d03e; border-radius:5px; background:#098bdc; color:white; text-align:left; font-size:13px; line-height:1.2; font-weight:800; box-shadow:0 3px 4px rgba(0,0,0,.22); transition:transform .15s ease,filter .15s ease; }
+.options button { min-height:57px; padding:10px 22px; border:2px solid #e3d03e; border-radius:5px; background:#098bdc; color:white; text-align:left; font-size:13px; line-height:1.2; font-weight:800; box-shadow:0 3px 4px rgba(0,0,0,.22); transition:transform .15s ease,filter .15s ease; animation: optionEnter .3s cubic-bezier(.23,1,.32,1) both; }
+.options button:nth-child(2){animation-delay:.05s}.options button:nth-child(3){animation-delay:.1s}.options button:nth-child(4){animation-delay:.15s}
 .options button:hover { filter:brightness(1.1); transform:translateY(-1px); }
 .analysis { padding-top:28px; font-size:14px; }
 .analysis p { max-width:390px; margin:0 auto 34px; line-height:1.45; font-weight:700; }
@@ -40,18 +44,25 @@ h1 { max-width:370px; margin: 0 auto 12px; font-size:17px; line-height:1.32; fon
 .tarot-card img { display:block; width:100%; aspect-ratio:.59; object-fit:cover; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,.35); }
 .tarot-card:hover { transform:translateY(-5px); }
 .tarot-card.dimmed { opacity:.22; filter:saturate(.4); }
-.tarot-card.selected { transform:translateY(-7px); }
+.tarot-card.selected { transform:translateY(-7px) rotateY(180deg); animation: cardPick .6s cubic-bezier(.23,1,.32,1) both; }
 .tarot-card small { position:absolute; top:-7px; left:50%; transform:translateX(-50%); display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:#e0c33b; color:#111; font-weight:800; }
 .result-page .card-grid { margin-bottom:48px; }
 .result-button { display:block; margin:0 auto; }
 .vsl-page { padding-top:30px; }
 .vsl-page h2 { margin:0 auto 20px; font-size:17px; line-height:1.4; font-weight:800; }
-.vsl-frame { position:relative; width:min(100%,512px); aspect-ratio:1/1.12; margin:auto; overflow:hidden; border-radius:4px; background:#171717; box-shadow:0 4px 12px rgba(0,0,0,.35); }
-.vsl-frame > img { position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; }
-.converte-player { position:absolute; inset:0; z-index:2; }
+.vsl-frame { position:relative; width:min(100%,512px); aspect-ratio:1/1.12; margin:auto; overflow:hidden; border-radius:4px; background:#171717; box-shadow:0 4px 12px rgba(0,0,0,.35); animation: pageEnter .5s .1s both; }
+.vsl-video { position:absolute; inset:0; z-index:2; width:100%; height:100%; object-fit:cover; background:#171717; }
+.vsl-poster { position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; transition:opacity .3s ease; }
+.video-ready .vsl-poster { opacity:.12; }
 .sound-overlay { position:absolute; z-index:3; inset:20% 5%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; border:1px solid rgba(255,255,255,.7); color:#fff; background:rgba(0,210,40,.78); font-size:20px; font-weight:800; }
 .sound-overlay span { font-size:58px; line-height:1; }
 .sound-overlay strong { font-size:20px; }
 .player-started .sound-overlay { display:none; }
+@keyframes pageEnter { from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:none} }
+@keyframes optionEnter { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:none} }
+@keyframes cardPick { 0%{transform:translateY(0) scale(1)} 45%{transform:translateY(-13px) scale(1.04)} 100%{transform:translateY(-7px) scale(1)} }
+@keyframes progressGlow { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.25)} }
+@keyframes buttonShine { 0%,48%{left:-40%} 70%,100%{left:130%} }
+@keyframes sparkleDrift { from{transform:translateY(0);opacity:.28} to{transform:translateY(-10px);opacity:.6} }
 @media (max-width:600px) { .funnel-shell{padding-top:18px;} .progress{margin-bottom:42px;} .logo{width:66px;height:66px;margin-bottom:12px;} .consultora-landing{width:min(100%,260px);} .landing .gold-button{margin-top:20px;} .analysis > strong{margin-bottom:150px;} .options button{font-size:12px;} .sound-overlay{font-size:16px;} .sound-overlay span{font-size:45px;} .sound-overlay strong{font-size:16px;} }
-@media (prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important;}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important;animation:none!important;}}

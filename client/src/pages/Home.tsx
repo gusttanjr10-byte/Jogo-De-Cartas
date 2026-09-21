@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Step = "landing" | "quiz" | "analysis" | "cards" | "result" | "vsl";
 type Question = { title: string; intro?: string; options: string[] };
@@ -74,22 +74,40 @@ function Progress({ value }: { value: number }) {
 }
 
 function Shell({ children, progress = 0 }: { children: React.ReactNode; progress?: number }) {
-  return <main className="ritual-page"><div className="ritual-halo" /><section className="funnel-shell"><img className="logo" src={logo} alt="Consulta gratuita" />{progress > 0 && <Progress value={progress} />}{children}</section></main>;
+  return <main className="ritual-page"><div className="ritual-halo" /><div className="ritual-sparkles" aria-hidden="true" /><section className="funnel-shell ritual-entrance"><img className="logo" src={logo} alt="Consulta gratuita" />{progress > 0 && <Progress value={progress} />}{children}</section></main>;
 }
 
 function Vsl() {
   const [started, setStarted] = useState(false);
+  const [ready, setReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    const host = document.getElementById("vid-6a42c048641d860e23c55335");
-    if (!host || document.getElementById("vturb-smartplayer-js")) return;
+    const video = videoRef.current;
+    if (!video) return;
+    const stream = "https://cdn.converteai.net/37209f46-f3bf-4549-a72e-f25bf0388e60/6a42be8fd7338761a2d2e259/main.m3u8";
+    const nativeHls = video.canPlayType("application/vnd.apple.mpegurl");
+    if (nativeHls) {
+      video.src = stream;
+      setReady(true);
+      return;
+    }
     const script = document.createElement("script");
-    script.id = "vturb-smartplayer-js";
-    script.src = "https://scripts.converteai.net/37209f46-f3bf-4549-a72e-f25bf0388e60/players/6a42c048641d860e23c55335/v4/player.js";
+    script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
     script.async = true;
+    script.onload = () => {
+      const Hls = (window as typeof window & { Hls?: new () => { loadSource: (src: string) => void; attachMedia: (media: HTMLVideoElement) => void; destroy: () => void } }).Hls;
+      if (!Hls || !videoRef.current) return;
+      const hls = new Hls();
+      hls.loadSource(stream);
+      hls.attachMedia(videoRef.current);
+      setReady(true);
+      videoRef.current.dataset.hls = "active";
+    };
     document.head.appendChild(script);
-    return () => { script.remove(); host.innerHTML = ""; };
+    return () => script.remove();
   }, []);
-  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""}`}><div id="vid-6a42c048641d860e23c55335" className="converte-player" /><img src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><div className="vsl-play-state">{started ? "" : ""}</div><button type="button" className="sound-overlay" onClick={() => setStarted(true)}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div></div></Shell>;
+  const playVideo = () => { setStarted(true); void videoRef.current?.play(); };
+  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""} ${ready ? "video-ready" : ""}`}><video ref={videoRef} className="vsl-video" poster="/manus-storage/card-12_a3b98876.jpg" controls playsInline preload="metadata" /><img className="vsl-poster" src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><button type="button" className="sound-overlay" onClick={playVideo}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div></div></Shell>;
 }
 
 function Cards({ onDone }: { onDone: () => void }) {
