@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Step = "landing" | "quiz" | "analysis" | "cards" | "result" | "vsl";
 type Question = { title: string; intro?: string; options: string[] };
@@ -79,7 +79,17 @@ function Shell({ children, progress = 0 }: { children: React.ReactNode; progress
 
 function Vsl() {
   const [started, setStarted] = useState(false);
-  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""}`}><img src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><div className="vsl-play-state">{started ? "Sua revelação está pronta para ouvir" : ""}</div><button type="button" className="sound-overlay" onClick={() => setStarted(true)}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div></div></Shell>;
+  useEffect(() => {
+    const host = document.getElementById("vid-6a42c048641d860e23c55335");
+    if (!host || document.getElementById("vturb-smartplayer-js")) return;
+    const script = document.createElement("script");
+    script.id = "vturb-smartplayer-js";
+    script.src = "https://scripts.converteai.net/37209f46-f3bf-4549-a72e-f25bf0388e60/players/6a42c048641d860e23c55335/v4/player.js";
+    script.async = true;
+    document.head.appendChild(script);
+    return () => { script.remove(); host.innerHTML = ""; };
+  }, []);
+  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""}`}><div id="vid-6a42c048641d860e23c55335" className="converte-player" /><img src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><div className="vsl-play-state">{started ? "" : ""}</div><button type="button" className="sound-overlay" onClick={() => setStarted(true)}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div></div></Shell>;
 }
 
 function Cards({ onDone }: { onDone: () => void }) {
@@ -106,5 +116,5 @@ export default function Home() {
   if (step === "result") return <Result onDone={() => setStep("vsl")} />;
   if (step === "analysis") return <Shell><div className="analysis"><p>A partir do que você me revelou...</p><p>O universo irá filtrar, entre milhares de combinações possíveis...</p><p>As únicas <b>8 cartas</b> capazes de falar diretamente com a sua energia neste momento.</p><p>Escolha apenas 3 para descobrir o caminho exato para destravar tudo em 2026.</p><b>Prepare-se.</b><Progress value={100} /><strong>Analisando suas respostas...</strong><button className="gold-button" onClick={() => setStep("cards")}>Escolher Minhas Cartas Agora</button></div></Shell>;
   if (step === "quiz") { const q = questions[question]; return <Shell progress={(question + 1) * 18}><div className="quiz"><h2>{q.title}</h2>{q.intro && <p className="intro">{q.intro}</p>}<div className="options">{q.options.map(option => <button key={option} type="button" onClick={() => question === questions.length - 1 ? setStep("analysis") : setQuestion(question + 1)}>{option}</button>)}</div></div></Shell>; }
-  return <Shell><div className="landing"><h1>Descubra Gratuitamente o Que as Cartas Vão Revelar Sobre Sua Vida!</h1><p>As cartas do baralho dourado sagrado podem revelar o caminho exato para <b>remover os bloqueios em sua vida.</b></p><button className="gold-button" onClick={() => setStep("quiz")}>CLIQUE AQUI E FAÇA SUA LEITURA GRATUITA!</button></div></Shell>;
+  return <Shell><div className="landing"><h1>Descubra Gratuitamente o Que as Cartas Vão Revelar Sobre Sua Vida!</h1><p>As cartas do baralho dourado sagrado podem revelar o caminho exato para <b>remover os bloqueios em sua vida.</b></p><img className="consultora-landing" src="/manus-storage/consultora_215990ec.webp" alt="Consultora de tarô" /><button className="gold-button" onClick={() => setStep("quiz")}>CLIQUE AQUI E FAÇA SUA LEITURA GRATUITA!</button></div></Shell>;
 }
