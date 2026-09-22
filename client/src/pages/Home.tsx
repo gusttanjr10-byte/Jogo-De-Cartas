@@ -3,21 +3,21 @@ import { useEffect, useMemo, useState } from "react";
 type Step = "landing" | "quiz" | "analysis" | "cards" | "result" | "vsl";
 type Question = { title: string; intro?: string; options: string[] };
 
-const logo = "/manus-storage/consulta-gratuita_9549de9b.webp";
+const logo = "/assets/consulta-gratuita.webp";
 const cardBacks = [
-  "/manus-storage/card-1_d2ce9c4e.webp",
-  "/manus-storage/card-2_edf3aeb9.webp",
-  "/manus-storage/card-3_97529d27.webp",
-  "/manus-storage/card-4_63aa3634.webp",
-  "/manus-storage/card-5_acfb5858.webp",
-  "/manus-storage/card-6-fixed_a00a0dac.png",
-  "/manus-storage/card-7_db5ea419.webp",
-  "/manus-storage/card-8_34df63a1.webp",
+  "/assets/cards/card-1.webp",
+  "/assets/cards/card-2.webp",
+  "/assets/cards/card-3.webp",
+  "/assets/cards/card-4.webp",
+  "/assets/cards/card-5.webp",
+  "/assets/cards/card-6-fixed.png",
+  "/assets/cards/card-7.webp",
+  "/assets/cards/card-8.webp",
 ];
 const revealed = [
-  "/manus-storage/roda_d9976d69.png",
-  "/manus-storage/louco_5f9c1cca.png",
-  "/manus-storage/torre_2a6b7002.png",
+  "/assets/cards/roda.png",
+  "/assets/cards/louco.png",
+  "/assets/cards/torre.png",
 ];
 
 const questions: Question[] = [
@@ -128,5 +128,5 @@ export default function Home() {
   if (step === "result") return <Result onDone={() => setStep("vsl")} />;
   if (step === "analysis") return <Shell><div className="analysis"><p>A partir do que você me revelou...</p><p>O universo irá filtrar, entre milhares de combinações possíveis...</p><p>As únicas <b>8 cartas</b> capazes de falar diretamente com a sua energia neste momento.</p><p>Escolha apenas 3 para descobrir o caminho exato para destravar tudo em 2026.</p><b>Prepare-se.</b><Progress value={100} /><strong>Analisando suas respostas...</strong><button className="gold-button" onClick={() => setStep("cards")}>Escolher Minhas Cartas Agora</button></div></Shell>;
   if (step === "quiz") { const q = questions[question]; return <Shell progress={(question + 1) * 18}><div className="quiz"><h2>{q.title}</h2>{q.intro && <p className="intro">{q.intro}</p>}<div className="options">{q.options.map(option => <button key={option} type="button" onClick={() => question === questions.length - 1 ? setStep("analysis") : setQuestion(question + 1)}>{option}</button>)}</div></div></Shell>; }
-  return <Shell><div className="landing"><h1>Descubra Gratuitamente o Que as Cartas Vão Revelar Sobre Sua Vida!</h1><p>As cartas do baralho dourado sagrado podem revelar o caminho exato para <b>remover os bloqueios em sua vida.</b></p><img className="consultora-landing" src="/manus-storage/consultora_215990ec.webp" alt="Consultora de tarô" /><button className="gold-button" onClick={() => setStep("quiz")}>CLIQUE AQUI E FAÇA SUA LEITURA GRATUITA!</button></div></Shell>;
+  return <Shell><div className="landing"><h1>Descubra Gratuitamente o Que as Cartas Vão Revelar Sobre Sua Vida!</h1><p>As cartas do baralho dourado sagrado podem revelar o caminho exato para <b>remover os bloqueios em sua vida.</b></p><img className="consultora-landing" src="/assets/consultora.webp" alt="Consultora de tarô" /><button className="gold-button" onClick={() => setStep("quiz")}>CLIQUE AQUI E FAÇA SUA LEITURA GRATUITA!</button></div></Shell>;
 }
