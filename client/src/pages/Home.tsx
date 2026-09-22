@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Step = "landing" | "quiz" | "analysis" | "cards" | "result" | "vsl";
 type Question = { title: string; intro?: string; options: string[] };
@@ -78,41 +78,30 @@ function Shell({ children, progress = 0 }: { children: React.ReactNode; progress
 }
 
 function Vsl() {
-  const [started, setStarted] = useState(false);
-  const [ready, setReady] = useState(false);
   const [offerVisible, setOfferVisible] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    const revealOffer = () => setOfferVisible(true);
-    const onTimeUpdate = () => { if (video.currentTime >= 1020) revealOffer(); };
-    video.addEventListener("timeupdate", onTimeUpdate);
-    video.addEventListener("ended", revealOffer);
-    const stream = "https://cdn.converteai.net/37209f46-f3bf-4549-a72e-f25bf0388e60/6a42be8fd7338761a2d2e259/main.m3u8";
-    const nativeHls = video.canPlayType("application/vnd.apple.mpegurl");
-    if (nativeHls) {
-      video.src = stream;
-      setReady(true);
-      return () => { video.removeEventListener("timeupdate", onTimeUpdate); video.removeEventListener("ended", revealOffer); };
-    }
+    const playerId = "vid-6ab1cdcdbe5b4b2f580f3e8c";
+    const mount = document.getElementById("smartplayer-mount");
+    if (!mount || document.getElementById("converteai-player-6ab1cdcdbe5b4b2f580f3e8c")) return;
+    const player = document.createElement("vturb-smartplayer");
+    player.id = playerId;
+    player.style.display = "block";
+    player.style.margin = "0 auto";
+    player.style.width = "100%";
+    player.style.maxWidth = "400px";
+    const placeholder = document.createElement("div");
+    placeholder.className = "vturb-player-placeholder";
+    mount.appendChild(player);
+    player.appendChild(placeholder);
     const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
+    script.id = "converteai-player-6ab1cdcdbe5b4b2f580f3e8c";
+    script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab1cdcdbe5b4b2f580f3e8c/v4/player.js";
     script.async = true;
-    script.onload = () => {
-      const Hls = (window as typeof window & { Hls?: new () => { loadSource: (src: string) => void; attachMedia: (media: HTMLVideoElement) => void; destroy: () => void } }).Hls;
-      if (!Hls || !videoRef.current) return;
-      const hls = new Hls();
-      hls.loadSource(stream);
-      hls.attachMedia(videoRef.current);
-      setReady(true);
-      videoRef.current.dataset.hls = "active";
-    };
     document.head.appendChild(script);
-    return () => { script.remove(); video.removeEventListener("timeupdate", onTimeUpdate); video.removeEventListener("ended", revealOffer); };
+    const offerTimer = window.setTimeout(() => setOfferVisible(true), 1020 * 1000);
+    return () => { window.clearTimeout(offerTimer); script.remove(); player.remove(); };
   }, []);
-  const playVideo = () => { setStarted(true); void videoRef.current?.play(); };
-  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className={`vsl-frame ${started ? "player-started" : ""} ${ready ? "video-ready" : ""}`}><video ref={videoRef} className="vsl-video" poster="/manus-storage/card-12_a3b98876.jpg" controls playsInline preload="metadata" /><img className="vsl-poster" src="/manus-storage/card-12_a3b98876.jpg" alt="VSL da leitura" /><button type="button" className="sound-overlay" onClick={playVideo}><b>Tenho algo pra te dizer!</b><span>🔇</span><strong>Clique para ouvir</strong></button></div>{offerVisible && <button type="button" className="gold-button offer-button">SIM, QUERO ATIVAR O CÓDIGO AGORA MESMO!</button>}</div></Shell>;
+  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className="vsl-frame smartplayer-frame"><div id="smartplayer-mount" className="smartplayer-host" /></div>{offerVisible && <button type="button" className="gold-button offer-button">SIM, QUERO ATIVAR O CÓDIGO AGORA MESMO!</button>}</div></Shell>;
 }
 
 function Cards({ onDone }: { onDone: () => void }) {
