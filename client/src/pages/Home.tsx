@@ -101,7 +101,7 @@ function Vsl() {
     const offerTimer = window.setTimeout(() => setOfferVisible(true), 1020 * 1000);
     return () => { window.clearTimeout(offerTimer); script.remove(); player.remove(); };
   }, []);
-  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className="vsl-frame smartplayer-frame"><div id="smartplayer-mount" className="smartplayer-host" /></div>{offerVisible && <button type="button" className="gold-button offer-button">SIM, QUERO ATIVAR O CÓDIGO AGORA MESMO!</button>}</div></Shell>;
+  return <Shell><div className="vsl-page"><h2>Sua Revelação Final:<br />A verdade está prestes a ser revelada!</h2><div className="vsl-frame smartplayer-frame"><div id="smartplayer-mount" className="smartplayer-host" /></div>{offerVisible && <a className="gold-button offer-button" href="https://pay.wiapy.com/FtrIKYwOwzg-">SIM, QUERO ATIVAR O CÓDIGO AGORA MESMO!</a>}</div></Shell>;
 }
 
 function Cards({ onDone }: { onDone: () => void }) {
